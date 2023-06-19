@@ -1,0 +1,101 @@
+A DESCRIPTION TO A WAVE EDITOR PROGRAM CODE
+
+
+~ Block 1: Menu Functions
+
+There are two "menu" functions in the program:
+
+"Global menu": The first one is main function that contains the main menu. It shows options to the user
+and due to the choice calls an appropriate function (e.g. modify or compose)
+
+"Modify menu": The second one is called if the "modify" option was chosen in the first menu.
+There are eight options: 7 of them allow to modify a .wav file in different ways and the last one
+is an "exit" option that returns user to the initial menu
+When the user inputs an option that he wants, an appropriate function is called
+
+Helping function:
+
+"Check validity of the file":
+This function receives input from user and checks the file with the  function from wave_helper.py
+If file is not valid - user is asked again for new file name and an appropriate error is displayed
+If input file exists function opens "Modify menu"
+
+"Save file":
+This function saves the file with the given values of rate and data
+using save_wave function from wave_helper.py
+Takes as parameters rate, data and the name of the file
+
+
+~ Block 2: Modifying functions
+
+There are 7 modifying functions that fit to the following operations: reverse, audio denial, speed up,
+slow down, volume up, volume down and low pass filter.
+
+Reverse function:
+- function takes a list as a parameter
+- returns a reversed list
+
+Audio denial function:
+- function takes a list as a parameter
+- takes each value in the inner list of the list of lists
+- returns a list of lists where each parameter is multiplied by -1
+- if the parameter is out of range (from -32768 to 32767), the value in the returned list is one of
+  the border values (if less than minimum the value returned is -32768 and if bigger than maximum
+  the value returned is 32767)
+
+Speed up function:
+- function takes a list as a parameter
+- if the index is even the inner list is returned if odd - not
+- returns a list of inner lists with even indices
+
+Slow down function:
+- function takes a list as a parameter
+- the average of two adjacent parameters is calculated for every value in the inner list
+- average values are wrapped up into a list and inserted to the list
+- returns an initial list with inserted values
+
+Volume up function:
+- function takes a list as a parameter
+- turns each value in the inner list of the list of lists
+- returns a list of lists where each parameter is multiplied by a volume constant (1.2)
+- if the parameter is out of range (from -32768 to 32767), the value in the returned list is one of
+  the border values (if less than minimum the value returned is -32768 and if bigger than maximum
+  the value returned is 32767)
+
+Volume down function:
+- function takes a list as a parameter
+- turns each value in the inner list of the list of lists
+- returns a list of lists where each parameter is divided by a volume constant (1.2)
+- if the parameter is out of range (from -32768 to 32767), the value in the returned list is one of
+  the border values (if less than minimum the value returned is -32768 and if bigger than maximum
+  the value returned is 32767)
+
+Low pass filter function:
+- function takes a list as a parameter
+- if the value is the first in the list, the value of the new list is an average of first
+  and second values
+- if the value is the last in the list, the value of the new list is an average of the last
+  and penultimate values
+- in case that the value is not first or last, the value of the new list is an average of the
+  previous, next and the initial value that was taken
+- the function returns a list with new values that are calculated as described above
+
+
+~ Block 3: Compose a melody
+
+Read file function:
+- takes a file as a parameter
+- opens and turns information in the file into the list
+- returns a list
+
+Compose melody function:
+- function takes no parameters
+- takes an input from the user (the name of the .txt file with instructions)
+- checks if the file exists, if not - prints an appropriate error and asks an input again
+- if the name of the file does not contain .txt ending: appends an ending to the name of the file
+- after that it runs through the list of instruction that is returned from the Read File function (see above)
+  and gives to the variables "freq" and "time" an appropriate values from the list and from the
+  dictionary of the notes
+- if the frequency parameter is 0: appends to a final data list [0, 0] "time"*125 times
+- else: appends to the list [data, data] list "time"*125 times where data is calculated with the given formula
+- in the end, calls a "Modify Menu" with the final data list and a constant SAMPLE_RATE that is given (2000)
